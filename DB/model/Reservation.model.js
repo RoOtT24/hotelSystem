@@ -37,7 +37,20 @@ const reservationSchema = new Schema(
     to:{
       type:Date,
       required: true,
-    }
+    },
+    paymentType:{
+      type:String,
+      enum:['Cash','Visa'],
+      default: 'Cash',
+    },
+    status:{
+      type:String,
+      enum:['pending', 'approved', 'complete', 'cancelled'],
+      default:'pending'
+    },
+    cancelReason:{
+      type:String,
+    },
   },
   {
     timestamps: true,
