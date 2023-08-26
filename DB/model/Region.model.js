@@ -23,8 +23,17 @@ const regionSchema = new Schema ({
     }, 
     countryId:{
         type:Types.ObjectId,
-        ref:'User',
+        ref:'Country',
         required:true
+    },
+    cityId:{
+        type:Types.ObjectId,
+        ref:'City',
+        required:true
+    },
+    description:{
+        type:String,
+        required:true,
     },
     lat:{
         type:Types.Decimal128,
@@ -38,6 +47,8 @@ const regionSchema = new Schema ({
         type:number,
         required:true,
     },
+
+    
 },
 {
     timestamps:true

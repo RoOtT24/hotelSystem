@@ -3,11 +3,7 @@ const citySchema = new Schema ({
     name:{
         type:String,
         required:true,
-        unique:true,
-    },
-    slug:{
-        type:String,
-        required:true,
+        // unique:true,
     },
     createdBy:{
         type:
@@ -23,7 +19,7 @@ const citySchema = new Schema ({
     }, 
     countryId:{
         type:Types.ObjectId,
-        ref:'User',
+        ref:'Country',
         required:true
     },
     lat:{

@@ -5,10 +5,6 @@ const countrySchema = new Schema ({
         required:true,
         unique:true,
     },
-    slug:{
-        type:String,
-        required:true,
-    },
     createdBy:{
         type:
             Types.ObjectId, 
