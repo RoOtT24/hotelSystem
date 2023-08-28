@@ -5,7 +5,7 @@ import { verifyToken } from "../Services/generateAndVerifyToken.js";
 export const roles = {
     Admin:'Admin',
     User:'User',
-    HR:'Super Admin',
+    SuperAdmin:'Super Admin',
 }
 
 export const auth =(accessRoles=Object.values(roles))=>{

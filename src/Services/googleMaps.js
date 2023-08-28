@@ -6,7 +6,7 @@ export const googleMap= (lat=0, lng=0, zoom=8)=>{
   .elevation({
     params: {
       locations: [{ lat, lng }],
-      key: "asdf",
+      key: process.env.GOOGLE_API_KEY,
       zoom
     },
     timeout: 1000, // milliseconds
