@@ -1,4 +1,5 @@
 import mongoose, {Schema,Types,model} from 'mongoose';
+
 const regionSchema = new Schema ({
     name:{
         type:String,
@@ -44,7 +45,7 @@ const regionSchema = new Schema ({
         required:true,
     },
     zipCode:{
-        type:number,
+        type:Number,
         required:true,
     },
 
