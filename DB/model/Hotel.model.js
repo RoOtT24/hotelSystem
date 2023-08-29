@@ -43,10 +43,6 @@ const HotelSchema = new Schema(
       type: Types.Decimal128,
       required: true,
     },
-    zipCode: {
-      type: number,
-      required: true,
-    },
     subImages: { type: [{ type: Object, required: true }], required: true },
     hasSeaView: { type: Boolean, required: true },
     facilities: { type: [{ type: String, required: true }], required: true },

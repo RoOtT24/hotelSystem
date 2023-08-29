@@ -12,5 +12,5 @@ router.put('/:regionId', auth(endPoint.update), validation(validators.updateRegi
 router.delete('/:regionId', auth(endPoint.delete), validation(validators.deleteRegion),asyncHandler(regionController.deleteRegion));
 router.get('/one/:regionId', auth(endPoint.get), validation(validators.getRegion),asyncHandler(regionController.getRegion));
 router.get('/', auth(endPoint.get), validation(validators.getRegions),asyncHandler(regionController.getRegions));
-router.get('/inCountry/:countryId', auth(endPoint.get), validation(validators.getRegionsInCity),asyncHandler(regionController.getRegionsInCity));
+router.get('/inCity/:countryId', auth(endPoint.get), validation(validators.getRegionsInCity),asyncHandler(regionController.getRegionsInCity));
 export default router;

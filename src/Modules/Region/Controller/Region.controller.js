@@ -1,5 +1,5 @@
 import regionModel from "../../../../DB/model/Region.model.js";
-import countryModel from "../../../../DB/model/Country.model.js";
+import cityModel from "../../../../DB/model/City.model.js";
 // import cloudinary from "../../../Services/cloudinary.js";
 // import slugify from "slugify";
 export const createRegion = async(req,res,next)=>{
@@ -35,7 +35,7 @@ export const updateRegion = async (req, res, next) => {
     if(!name && !lng && !lat && !zipCode) {
         return next(new Error('nothing to update',{cause:400}));
     }
-    const region = await regionModel.findOne({_id:regionId, countryId, cityId},{...req.body, updatedBy:req.user._id},{new:true});
+    const region = await regionModel.findOneAndUpdate({_id:regionId, countryId, cityId},{...req.body, updatedBy:req.user._id},{new:true});
     if(!region) {
         return next(new Error('no region found',{cause:404}));
     }

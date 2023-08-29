@@ -39,7 +39,7 @@ export const updateCity = async (req, res, next) => {
     if(!name && !lng && !lat) {
         return next(new Error('nothing to update',{cause:400}));
     }
-    const city = await cityModel.findOne({_id:cityId, countryId},{...req.body, updatedBy:req.user._id},{new:true});
+    const city = await cityModel.findOneAndUpdate({_id:cityId, countryId},{...req.body, updatedBy:req.user._id},{new:true});
     if(!city) {
         return next(new Error('no city found',{cause:404}));
     }
