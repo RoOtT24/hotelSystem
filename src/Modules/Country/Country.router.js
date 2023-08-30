@@ -7,7 +7,6 @@ import validation from "../../Middleware/validation.js";
 import { auth } from "../../Middleware/auth.middleware.js";
 import { endPoint } from "./Country.EndPoint.js";
 import cityRouter from '../City/City.router.js';
-asyncHandler
 const router = Router();
 router.use('/city', cityRouter);
 // router.post('/',fileUpload(fileValidation.image).single('image'),validation(validators.createCountry),asyncHandler(countryController.createCountry)) 

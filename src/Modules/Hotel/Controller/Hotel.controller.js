@@ -53,7 +53,7 @@ export const updateHotel = async (req, res, next) => {
         return next(new Error('no city/country/region found', {cause:404}));
     }
 
-    const hotel = await hotelModel.findOne({_id:hotelId, countryId, cityId},{...req.body, updatedBy:req.user._id},{new:true});
+    const hotel = await hotelModel.findOne({_id:hotelId, countryId, cityId});
     if(!hotel) {
         return next(new Error('no hotel found',{cause:404}));
     }
@@ -63,6 +63,7 @@ export const updateHotel = async (req, res, next) => {
     if(await hotelModel.findOne(name))
         return next(new Error('duplicate hotel name', {cause:400}))
     hotel.name = name;
+    hotel.slug = slugify(name);
    }
    if(lng || lat){
     if( (lng && hotel.lng== lng) || (lat && hotel.lat== lat))
@@ -80,11 +81,11 @@ export const updateHotel = async (req, res, next) => {
    hotel.lat = req.body.lat;
    hotel.lng = req.body.lng;
 }
-
+const {slug} = hotel;
 if (req.body.files) {
     if (req.body.files?.mainImage[0]) {
       const { secure_url, public_id } = await cloudinary.uploader.upload(
-        req.files.mainImage[0].oath,
+        req.files.mainImage[0].path,
         { folder: `${process.env.APP_NAME}/hotel/${slug}/mainImage` }
       );
       await cloudinary.uploader.destroy(product.mainImage.public_id);
@@ -97,7 +98,7 @@ if (req.body.files) {
       product.subImages = [];
       for (const img in req.body.files?.subImages) {
         const { secure_url, public_id } = await cloudinary.uploader.upload(
-          req.files.mainImage[0].oath,
+          img.path,
           { folder: `${process.env.APP_NAME}/hotel/${slug}/subImages` }
         );
         product.subImages.push({ secure_url, public_id });

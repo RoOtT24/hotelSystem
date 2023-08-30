@@ -30,16 +30,8 @@ const roomSchema = new Schema(
         ref: "Country",
         required: true,
     },
-    lat: {
-      type: Types.Decimal128,
-      required: true,
-    },
-    lng: {
-      type: Types.Decimal128,
-      required: true,
-    },
     type: {
-      type: string,
+      type: String,
       required: true,
       enum: ["Suite", "Luxury", "Deluxe", "Premium"],
     },
@@ -56,37 +48,29 @@ const roomSchema = new Schema(
         default:false,
     },
     numberOfTwinBeds:{
-        type:number,
+        type:Number,
         required:true,
     },
     numberOfQueenBeds:{
-        type:number,
+        type:Number,
         required:true,
     },
     numberOfFullBeds:{
-        type:number,
+        type:Number,
         required:true,
     },
     numberOfKingBeds:{
-        type:number,
+        type:Number,
         required:true,
     },
     nightPrice:{
-        type:number,
+        type:Number,
         required:true,
     },
     discountPerDay:{
-        type:number,
+        type:Number,
         default:0,
-    },
-    discount:{
-        type:number,
-        default:0,
-    },
-    finalPrice:{
-        type:number,
-        required:true,
-    },
+    }
   },
   {
     timestamps: true,
