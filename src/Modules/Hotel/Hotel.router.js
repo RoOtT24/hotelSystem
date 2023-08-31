@@ -11,7 +11,7 @@ import roomRouter from '../Room/Room.router.js';
 const router = Router({mergeParams:true});
 router.use('room', roomRouter);
 router.post('/', auth(endPoint.create), fileUpload(fileValidation.image).fields([{name:'mainImage', maxCount:1}, {name:'subImages', maxCount:30}]), validation(validators.createHotel),asyncHandler(hotelController.createHotel));
-router.put('/:hotelId', auth(endPoint.update), validation(validators.updateHotel),asyncHandler(hotelController.updateHotel));
+router.put('/:hotelId', auth(endPoint.update), fileUpload(fileValidation.image).fields([{name:'mainImage', maxCount:1}, {name:'subImages', maxCount:30}]), validation(validators.updateHotel),asyncHandler(hotelController.updateHotel));
 router.delete('/:hotelId', auth(endPoint.delete), validation(validators.deleteHotel),asyncHandler(hotelController.deleteHotel));
 router.get('/one/:hotelId', auth(endPoint.get), validation(validators.getHotel),asyncHandler(hotelController.getHotel));
 router.get('/', auth(endPoint.get), validation(validators.getHotels),asyncHandler(hotelController.getHotels));

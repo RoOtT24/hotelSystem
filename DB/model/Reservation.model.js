@@ -5,20 +5,20 @@ const reservationSchema = new Schema(
       type: [
         {
           roomId: { type: Types.ObjectId, ref: "Room", required: true },
-          price: { type: number, required: true },
-          discountPerDay: { type: number, required: true },
-          finalPrice: { type: number, required: true },
+          // price: { type: Number, required: true },
+          // discountPerDay: { type: Number, required: true },
+          // finalPrice: { type: Number, required: true },
         },
       ],
       required: true,
     },
     discount: {
       // amount (not percentage)
-      type: number,
+      type: Number,
       default: 0,
     },
     finalPrice: {
-      type: number,
+      type: Number,
       required: true,
     },
     userId: {
@@ -50,6 +50,10 @@ const reservationSchema = new Schema(
     },
     cancelReason:{
       type:String,
+    },
+    updatedBy:{
+      type:Types.ObjectId,
+      ref:'User'
     },
   },
   {
