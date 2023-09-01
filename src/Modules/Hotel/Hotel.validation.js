@@ -9,6 +9,7 @@ export const createHotel = joi.object({
    countryId: generalFields.id.required(),
    cityId: generalFields.id.required(),
    regionId: generalFields.id.required(),
+   files:joi.object({mainImage:joi.array().items(generalFields.file).required(), subImages:joi.array().items(generalFields.file)}).required(),
 }).required();
 
 export const updateHotel = joi.object({

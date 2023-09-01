@@ -23,7 +23,7 @@ router.patch(
 );
 router.patch(
   "/makeAdmin/:id",
-  auth(roles.Admin),
+  auth(roles.SuperAdmin),
   validation(validators.makeAdmin),
   asyncHandler(userController.makeAdmin)
 );
