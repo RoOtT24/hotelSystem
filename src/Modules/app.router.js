@@ -31,7 +31,7 @@ const initApp=(app,express)=>{
     app.use('/reservation',ReservationRouter);
     app.use('/coupon',CouponRouter);
     app.use('/*', (req,res)=>{
-        return next(new Error('page not found', {cause:404}));
+        return res.status(404).json({message:'page not found'});
     })
 
     //global error handler
