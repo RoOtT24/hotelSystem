@@ -133,7 +133,7 @@ export const getHotel = async (req,res,next)=>{
         return next(new Error('no city/country/region found', {cause:404}));
     }
   
-    const hotel = await hotelModel.findOne({_id:hotelId, countryId, cityId, regionId});
+    const hotel = await hotelModel.findOne({_id:hotelId, countryId, cityId, regionId}).populate('reviews');
     if(!hotel) {
         return next(new Error('no hotel found',{cause:404}));
     }
@@ -141,7 +141,7 @@ export const getHotel = async (req,res,next)=>{
 }
 
 export const getHotels = async (req,res,next)=>{
-    const hotels = await hotelModel.find();
+    const hotels = await hotelModel.find().populate('reviews');
     if(!hotels) {
         return next(new Error('no hotels found',{cause:404}));
     }
@@ -155,7 +155,7 @@ export const getHotelsInCity = async (req,res,next)=>{
     if(!city){
         return next(new Error('no city/country found', {cause:404}));
     }
-    const hotels = await hotelModel.find({countryId, cityId});
+    const hotels = await hotelModel.find({countryId, cityId}).populate('reviews');
     if(!hotels) {
         return next(new Error('no hotels found',{cause:404}));
     }
@@ -165,7 +165,7 @@ export const getHotelsInCity = async (req,res,next)=>{
 export const getHotelsInRegion = async (req,res,next)=>{
     const {countryId, cityId, regionId} = req.params;
 
-    const region = regionModel.findOne({countryId,_id:regionId, cityId});
+    const region = regionModel.findOne({countryId,_id:regionId, cityId}).populate('reviews');
     if(!region){
         return next(new Error('no city/country/region found', {cause:404}));
     }

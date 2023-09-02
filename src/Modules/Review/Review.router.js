@@ -9,6 +9,7 @@ import { endPoint } from "./Review.EndPoint.js";
 const router = Router({mergeParams:true});
 
 router.post('/:roomId', auth(endPoint.create), fileUpload(fileValidation.image).fields([{name:'images', maxCount:10}]), validation(validators.createReview), asyncHandler(reviewController.createReview));
-router.get('/:hotelId', auth(endPoint.get), validation(validators.getReviews), asyncHandler(reviewController.getReviews));
+router.get('/:hotelId', validation(validators.getReviews), asyncHandler(reviewController.getReviews));
+router.delete('/:reviewId', auth(), validation(validators.getReviews), asyncHandler(reviewController.getReviews));
 
 export default router;

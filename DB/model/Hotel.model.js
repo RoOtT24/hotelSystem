@@ -51,9 +51,13 @@ const HotelSchema = new Schema(
       required: true,
     },
   },
-  {
-    timestamps: true,
-  }
+  { toJSON: { virtuals: true }, toObject: { virtuals: true }, timestamps: true }
 );
+
+HotelSchema.virtual('reviews', {
+  localField:'_id',
+  foreignField:'hotelId',
+  ref:"Review"
+});
 const HotelModel = mongoose.models.Hotel || model("Hotel", HotelSchema);
 export default HotelModel;
