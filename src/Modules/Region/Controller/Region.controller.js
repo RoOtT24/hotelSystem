@@ -1,16 +1,17 @@
 import regionModel from "../../../../DB/model/Region.model.js";
 import cityModel from "../../../../DB/model/City.model.js";
 // import cloudinary from "../../../Services/cloudinary.js";
-// import slugify from "slugify";
+import slugify from "slugify";
+
 export const createRegion = async(req,res,next)=>{
-    const {name, lat, lng, zipCode} = req.body;
+    const {name, lat, lng} = req.body;
     const {countryId, cityId} = req.params;
 
     const city = cityModel.findOne({countryId,_id:cityId});
     if(!city){
         return next(new Error('no city/country found', {cause:404}));
     }
-    // const slug = slugify(name)
+    const slug = slugify(name)
     if(await regionModel.findOne({name})){
         return next(new Error("duplicated region name",{cause:409}));
     }
@@ -18,12 +19,12 @@ export const createRegion = async(req,res,next)=>{
     // const region = await regionModel.create({name,slug,image:{
     //     public_id,secure_url  
     // }})
-    const region = await regionModel.create({zipCode, name,lat,lng, createdBy:req.user._id, updatedBy:req.user._id, countryId, cityId});
+    const region = await regionModel.create({name,lat,lng, createdBy:req.user._id, updatedBy:req.user._id, countryId, cityId, slug});
     return res.status(201).json({message:'success',region});
 }
 
 export const updateRegion = async (req, res, next) => {
-    const {name,lng,lat, zipCode} = req.body;
+    const {name,lng,lat} = req.body;
     const {regionId} = req.params;
     const {countryId, cityId} = req.params;
 
@@ -32,8 +33,11 @@ export const updateRegion = async (req, res, next) => {
         return next(new Error('no city/country found', {cause:404}));
     }
 
-    if(!name && !lng && !lat && !zipCode) {
+    if(!name && !lng && !lat) {
         return next(new Error('nothing to update',{cause:400}));
+    }
+    if(name){
+        req.body.slug = slugify(name);
     }
     const region = await regionModel.findOneAndUpdate({_id:regionId, countryId, cityId},{...req.body, updatedBy:req.user._id},{new:true});
     if(!region) {

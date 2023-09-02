@@ -2,6 +2,8 @@
 import couponModel from "../../../../DB/model/Coupon.model.js";
 import cloudinary from "../../../Services/cloudinary.js";
 import slugify from "slugify";
+import userModel from "../../../../DB/model/User.model.js";
+import { sendEmail } from "../../../Services/sendEmail.js";
 
 export const createCoupon = async (req, res, next) => {
   const name = req.body.name.toLowerCase();
@@ -23,6 +25,10 @@ export const createCoupon = async (req, res, next) => {
     updatedBy:req.user._id,
     expireDate:dateConvert
   });
+  const users = await userModel.find({role:'User'});
+  for(let i = 0; i < users.length; i++){
+    sendEmail(users[i].email, 'new coupon!', `<p>coupon name: ${coupon.name}</p><br/> <p>id: ${coupon._id}</p><br/><p>expire date: ${dateConvert}</p>`);
+  }
   return res.status(200).json({ message: "success", coupon });
 // }
 };
@@ -61,6 +67,7 @@ export const getSpecificCoupon = async (req, res, next) => {
     return res.status(404).json({ message: "no coupon found"});
   return res.status(200).json({message:"success", coupon});
 }
+
 export const getCoupons = async (req, res, next) => {
   const coupons = await couponModel.find();
   

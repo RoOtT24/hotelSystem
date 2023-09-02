@@ -6,19 +6,17 @@ import { asyncHandler } from '../../../Services/errorHandling.js';
 import { customAlphabet } from "nanoid";
 
 export const signup= async (req,res,next)=>{
-
-   
-    const {userName,email,password, cPassword} = req.body;
   
-    const user = await userModel.findOne({email});
-    if(user){
-   //     return res.status(409).json({message:"email already exists"});
-        return next(new Error("email already exists"),{cause:409});
-    }
-    const hashPassword = hash(password);
-    const token = generateToken({email},process.env.SIGNUP_TOKEN,60*30);
-    const refreshToken = generateToken({email},process.env.SIGNUP_TOKEN,null);
-    
+  const {userName,email,password, cPassword} = req.body;
+  
+  const user = await userModel.findOne({email});
+  if(user){
+    //     return res.status(409).json({message:"email already exists"});
+    return next(new Error("email already exists"),{cause:409});
+  }
+  const hashPassword = hash(password);
+  const token = generateToken({email},process.env.SIGNUP_TOKEN,60*30);
+  const refreshToken = generateToken({email},process.env.SIGNUP_TOKEN);
     const link =`${req.protocol}://${req.headers.host}/auth/confirmEmail/${token}`;
     const rLink = `${req.headers.host}://${req.protocol}/auth/newConfirmEmail/${refreshToken}`;
 

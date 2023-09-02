@@ -22,31 +22,31 @@ const reviewSchema = new Schema(
       required: true,
     },
     staff:{
-        type:number,
+        type:Types.Decimal128,
         required: true,
     },
     facilities:{
-        type:number,
+        type:Types.Decimal128,
         required:true,
     },
     cleanliness:{
-        type:number,
+        type:Types.Decimal128,
         required: true,
     },
     comfort:{
-        type:number,
+        type:Types.Decimal128,
         required: true,
     },
     valueForMoney:{
-        type:number,
+        type:Types.Decimal128,
         required: true,
     },
     location:{
-        type:number,
+        type:Types.Decimal128,
         required: true,
     },
     rating:{
-        type:number,
+        type:Types.Decimal128,
         required: true,
     },
     images:[{type:Object, required:true}],

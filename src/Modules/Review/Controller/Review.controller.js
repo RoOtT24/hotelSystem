@@ -17,7 +17,7 @@ export const createReview = async (req, res, next) => {
     return next(new Error(`can not review this hotel again`, {cause:400}));
   }
   const rating = (location + valueForMoney + facilities + staff + comfort + cleanliness + facilities) / 7.0;
-  const review = await reviewModel.create({createdBy:req.user._id, location , valueForMoney , facilities , staff , comfort , cleanliness , facilities, rating, goodReview , badReview})
+  const review = await reviewModel.create({createdBy:req.user._id, updatedBy:req.user._id, location , valueForMoney , facilities , staff , comfort , cleanliness , facilities, rating, goodReview , badReview, hotelId:'64f3969e205cac8f0b416aca', userId:req.user._id})
 
   return res.status(201).json({ message: "success", review });
 };

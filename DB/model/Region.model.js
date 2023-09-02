@@ -32,10 +32,6 @@ const regionSchema = new Schema ({
         ref:'City',
         required:true
     },
-    description:{
-        type:String,
-        required:true,
-    },
     lat:{
         type:Types.Decimal128,
         required:true,
@@ -44,11 +40,6 @@ const regionSchema = new Schema ({
         type:Types.Decimal128,
         required:true,
     },
-    zipCode:{
-        type:Number,
-        required:true,
-    },
-
     
 },
 {

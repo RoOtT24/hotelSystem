@@ -9,6 +9,7 @@ import RegionRouter from "./Region/Region.router.js";
 import HotelRouter from "./Hotel/Hotel.router.js";
 import RoomRouter from "./Room/Room.router.js";
 import ReservationRouter from "./Reservation/Reservation.router.js";
+import ReviewRouter from "./Review/Review.router.js";
 import CouponRouter from "./Coupon/Coupon.router.js";
 import path from 'path'; 
 import {fileURLToPath} from 'url';
@@ -30,6 +31,7 @@ const initApp=(app,express)=>{
     app.use('/room',RoomRouter);
     app.use('/reservation',ReservationRouter);
     app.use('/coupon',CouponRouter);
+    app.use('/review',ReviewRouter);
     app.use('/*', (req,res)=>{
         return res.status(404).json({message:'page not found'});
     })

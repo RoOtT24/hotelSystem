@@ -8,8 +8,7 @@ import { auth } from "../../Middleware/auth.middleware.js";
 import { endPoint } from "./Country.EndPoint.js";
 import cityRouter from '../City/City.router.js';
 const router = Router();
-router.use('/city', cityRouter);
-// router.post('/',fileUpload(fileValidation.image).single('image'),validation(validators.createCountry),asyncHandler(countryController.createCountry)) 
+router.use('/:countryId/city', cityRouter);
 router.post('/', auth(endPoint.create), validation(validators.createCountry),asyncHandler(countryController.createCountry));
 router.put('/:countryId', auth(endPoint.update), validation(validators.updateCountry),asyncHandler(countryController.updateCountry));
 router.delete('/:countryId', auth(endPoint.delete), validation(validators.deleteCountry),asyncHandler(countryController.deleteCountry));

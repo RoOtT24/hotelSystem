@@ -41,6 +41,10 @@ export const createRoom = async (req, res, next) => {
   req.body.mainImage = { secure_url, public_id };
   req.body.createdBy = req.user._id;
   req.body.updatedBy = req.user._id;
+  req.body.countryId = countryId
+  req.body.cityId = cityId
+  req.body.regionId = regionId
+  req.body.hotelId = hotelId
 
   const room = await roomModel.create({ ...req.body });
   return res.status(201).json({ message: "success", room });

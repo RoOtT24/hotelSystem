@@ -7,12 +7,12 @@ import couponModel from "../../../../DB/model/Coupon.model.js";
 
 export const createReservation = async (req, res, next) => {
   const { from, to, couponId, rooms , paymentType} = req.body;
-  const { roomId } = req.params;
 
-  const room = await roomModel.findById(roomId);
-  if (!room) {
-    return next(new Error("no room found", { cause: 404 }));
-  }
+  // for(let i = 0; i < rooms.length; i++) {
+  //   const checkRoom = await roomModel.findById(rooms[i].roomId);
+  //   if(!checkRoom)
+  //     return next(new Error(`Invalid room id ${rooms[i].roomId}`,{cause:400}));
+  // }
   if (couponId) {
     const coupon = await couponModel.findById(couponId);
     if (!coupon) return next(new Error("no coupon found", { cause: 404 }));
@@ -36,23 +36,43 @@ export const createReservation = async (req, res, next) => {
   if(from.diff(parsedFrom,"days")>0 || now.diff(parsedTo,"days")>0)
     return next(new Error('invalid dates', {cause:400}))
   req.body.finalPrice =0;
-  for (room in rooms) {
-    const checkRoom = await roomModel.findById(room.roomId);
+  // req.body.roomNames = "";
+  for (let i = 0; i < rooms.length; ++i) {
+    const checkRoom = await roomModel.findById(rooms[i].roomId);
     if(!checkRoom){
-      return next(new Error(`invalid room ${room.roomId}`, {cause:400}));
+      return next(new Error(`invalid room ${rooms[i].roomId}`, {cause:400}));
     }
-    const reservationCheck = await reservationModel.findOne({status:{$not:'cancelled'},roomId, $or:[{$and:[{from:{$lte:from}}, {to:{$gt:from}}]}, {$and:[{from:{$gte:from}}, {from:{lte:to}}]}]});
+    const reservationCheck = await reservationModel.findOne({status:{$not:'cancelled'},roomId:rooms[i].roomId, $or:[{$and:[{from:{$lte:from}}, {to:{$gt:from}}]}, {$and:[{from:{$gte:from}}, {from:{lte:to}}]}]});
     if(reservationCheck)
       return next(new Error(`the room is already reserved at this date`,{cause:400}));
     const discount = diff > 7 ? 3.5 * checkRoom.discountPerDay: diff/2*checkRoom.discountPerDay;
     const finalPrice = discount*checkRoom.price;
     req.body.finalPrice += finalPrice;
+    // if(i != 0)
+    // req.body.roomNames += ", "
+    // req.body.roomNames += checkRoom.name;
   }
   if(paymentType && paymentType == 'Visa')
       req.body.status = 'approved';
 
   req.body.userId = req.user._id;
   const reservation = await reservationModel.create({ ...req.body });
+
+  // const invoice = {
+  //   shipping: {
+  //     name: req.user.userName,
+  //     address:`${req.body.roomNames}`,
+  //     // city: "San Francisco",
+  //     // state: "CA",
+  //     country: "will make it in next version",
+  //     // postal_code: 94111
+  //   },
+  //   items: order.products,
+  //   subtotal:order.subTotal,
+  //   total: order.finalPrice,
+  //   invoice_nr: order._id
+  // };
+
   return res.status(201).json({ message: "success", reservation });
 };
 

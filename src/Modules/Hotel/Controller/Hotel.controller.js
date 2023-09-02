@@ -34,7 +34,11 @@ export const createHotel = async(req,res,next)=>{
       );
       req.body.mainImage = { secure_url, public_id };   
       req.body.createdBy = req.user._id;
-  req.body.updatedBy = req.user._id; 
+    req.body.updatedBy = req.user._id; 
+  req.body.regionId = regionId;
+  req.body.countryId = countryId;
+  req.body.cityId = cityId;
+
     //   const hotel = await hotelModel.create({createdBy:req.user._id, updatedBy:req.user._id, lng, lat, cityId, countryId, regionId, name, slug, mainImage:{
     //     public_id,secure_url  
     // }});
@@ -43,7 +47,7 @@ export const createHotel = async(req,res,next)=>{
 }
 
 export const updateHotel = async (req, res, next) => {
-    const {name,lng,lat} = req.body;
+    const {name,lng,lat, hasSeaView, facilities} = req.body;
     const {hotelId} = req.params;
     const {countryId, cityId, regionId} = req.params;
     // const { mainImage, subImages } = req.files;
@@ -105,6 +109,12 @@ if (req.body.files) {
       }
     }
   }
+  if(facilities){
+    hotel.facilities = facilities;
+  }
+  if(hasSeaView)
+    hotel.hasSeaView = hasSeaView;
+
     hotel.updatedBy = req.user._id;
     hotel.save();
     return res.status(200).json({message:'success', hotel});

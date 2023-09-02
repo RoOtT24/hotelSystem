@@ -9,7 +9,7 @@ import fileUpload, { fileValidation } from "../../Services/multerCloudinary.js";
 import roomRouter from '../Room/Room.router.js';
 
 const router = Router({mergeParams:true});
-router.use('room', roomRouter);
+router.use('/:hotelId/room', roomRouter);
 router.post('/', auth(endPoint.create), fileUpload(fileValidation.image).fields([{name:'mainImage', maxCount:1}, {name:'subImages', maxCount:30}]), validation(validators.createHotel),asyncHandler(hotelController.createHotel));
 router.put('/:hotelId', auth(endPoint.update), fileUpload(fileValidation.image).fields([{name:'mainImage', maxCount:1}, {name:'subImages', maxCount:30}]), validation(validators.updateHotel),asyncHandler(hotelController.updateHotel));
 router.delete('/:hotelId', auth(endPoint.delete), validation(validators.deleteHotel),asyncHandler(hotelController.deleteHotel));
