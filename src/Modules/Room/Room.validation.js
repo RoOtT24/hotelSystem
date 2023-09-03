@@ -28,6 +28,7 @@ export const updateRoom = joi.object({
    countryId: generalFields.id.required(),
    cityId: generalFields.id.required(),
    regionId: generalFields.id.required(),
+   roomId: generalFields.id.required(),
    hotelId: generalFields.id.required(),
    hasWifi:joi.boolean(),
    hasSeaView:joi.boolean(),

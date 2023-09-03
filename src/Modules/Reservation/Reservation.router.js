@@ -12,6 +12,6 @@ router.post('/', auth(endPoint.create), validation(validators.createReservation)
 router.put('/:reservationId', auth(endPoint.update), validation(validators.updateReservation),asyncHandler(reservationController.updateReservation));
 router.get('/one/:reservationId', auth(), validation(validators.getReservation),asyncHandler(reservationController.getReservation));
 router.get('/', auth(endPoint.get), validation(validators.getReservations),asyncHandler(reservationController.getReservations));
-router.patch('/cancelReservation', auth(), validation(validators.cancelReservation),asyncHandler(reservationController.cancelReservation));
-router.get('/inHotel/', auth(endPoint.get), validation(validators.getReservationsInHotel),asyncHandler(reservationController.getReservationsInHotel));
+router.patch('/cancelReservation/:reservationId', auth(), validation(validators.cancelReservation),asyncHandler(reservationController.cancelReservation));
+// router.get('/inHotel/:hotelId', auth(endPoint.get), validation(validators.getReservationsInHotel),asyncHandler(reservationController.getReservationsInHotel));
 export default router;

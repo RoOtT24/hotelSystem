@@ -65,15 +65,15 @@ export const updateRoom = async (req, res, next) => {
     return next(new Error("no hotel found in this area", { cause: 404 }));
   }
 
-  const room = await roomModel.findOne(
-    { _id: roomId, countryId, cityId, regionId, hotelId });
-  if (!room) {
-    return next(new Error("no room found", { cause: 404 }));
-  }
+  const room = await roomModel.findById(
+     roomId);
+     if (!room) {
+       return next(new Error("no room found", { cause: 404 }));
+      }
   if (name) {
     if (name == room.name)
       return next(new Error("can not enter the same name", { cause: 400 }));
-    if (await roomModel.findOne(name))
+    if (await roomModel.findOne({name}))
       return next(new Error("duplicate room name", { cause: 400 }));
     // room.name = name;
     req.body.slug = slugify(name)
@@ -107,7 +107,7 @@ export const updateRoom = async (req, res, next) => {
   }
   req.body.updatedBy = req.user._id;
   const result = await roomModel.findOneAndUpdate(
-    { _id: roomId, countryId, cityId, regionId, hotelId },
+    { _id: roomId },
     { ...req.body}, {new:true}
   );
   return res.status(200).json({ message: "success", room:result });

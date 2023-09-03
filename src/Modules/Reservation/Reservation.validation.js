@@ -10,8 +10,9 @@ export const createReservation = joi.object({
 }).required();
 
 export const updateReservation = joi.object({
-   discount:joi.number().required(),
+   discount:joi.number(),
    reservationId:generalFields.id.required(),
+   status:joi.string().allow('pending', 'approved', 'complete', 'cancelled'),
 }).required();
 
 export const cancelReservation = joi.object({

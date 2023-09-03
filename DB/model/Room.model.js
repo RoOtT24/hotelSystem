@@ -30,6 +30,16 @@ const roomSchema = new Schema(
         ref: "Country",
         required: true,
     },
+    regionId: {
+        type: Types.ObjectId,
+        ref: "Region",
+        required: true,
+    },
+    hotelId: {
+        type: Types.ObjectId,
+        ref: "Hotel",
+        required: true,
+    },
     type: {
       type: String,
       required: true,
