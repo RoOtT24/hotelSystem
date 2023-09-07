@@ -6,6 +6,8 @@ import roomModel from "../../../../DB/model/Room.model.js";
 import couponModel from "../../../../DB/model/Coupon.model.js";
 import moment from "moment";
 import { roles } from "../../../Middleware/auth.middleware.js";
+import { sendEmail } from "../../../Services/sendEmail.js";
+import { createInvoice } from "../../../Services/pdf.js";
 
 export const createReservation = async (req, res, next) => {
   let { from, to, couponId, rooms, paymentType } = req.body;
@@ -13,6 +15,7 @@ export const createReservation = async (req, res, next) => {
   if (couponId) {
     const coupon = await couponModel.findById(couponId);
     if (!coupon) return next(new Error("no coupon found", { cause: 404 }));
+    if(coupon.usedBy.contains(req.user.id)) return next(new Error("coupon already used by this user", { cause: 400 }));
     const now = moment();
     const parsed = moment(coupon.expireDate, "DD/MM/YYYY");
     const diff = now.diff(parsed, "days");
@@ -31,9 +34,11 @@ export const createReservation = async (req, res, next) => {
   const diff = parsedTo.diff(parsedFrom, "days");
   // return res.json(diff)
   req.body.finalPrice = 0;
+  req.body.subTotal = 0;
   if (diff < 0 || now.diff(parsedTo, "days") > 0)
     return next(new Error("invalid dates", { cause: 400 }));
-  // req.body.roomNames = "";
+  // req.body.roomNames = [];
+  req.body.roomsInvoke = [];
   for (let i = 0; i < rooms.length; ++i) {
     const checkRoom = await roomModel.findById(rooms[i].roomId);
     if (!checkRoom) {
@@ -66,9 +71,12 @@ export const createReservation = async (req, res, next) => {
       (diff > 7
         ? 3.5 * checkRoom.discountPerDay
         : (diff / 2) * checkRoom.discountPerDay) / 100;
-    const finalPrice = checkRoom.nightPrice - discount * checkRoom.nightPrice;
+        checkRoom.finalPrice = checkRoom.nightPrice * diff;
+        req.body.subTotal += checkRoom.finalPrice;
+        const finalPrice = (checkRoom.nightPrice - discount * checkRoom.nightPrice)*diff;
     req.body.finalPrice += finalPrice;
     req.body.discount = discount * 100;
+    req.body.roomsInvoke.push(checkRoom);
   }
   if (paymentType && paymentType == "Visa") req.body.status = "approved";
   // return res.json(req.body.finalPrice)
@@ -78,20 +86,26 @@ export const createReservation = async (req, res, next) => {
   req.body.to = parsedTo.toDate();
   const reservation = await reservationModel.create({ ...req.body });
 
-  // const invoice = {
-  //   shipping: {
-  //     name: req.user.userName,
-  //     address:`${req.body.roomNames}`,
-  //     // city: "San Francisco",
-  //     // state: "CA",
-  //     country: "will make it in next version",
-  //     // postal_code: 94111
-  //   },
-  //   items: order.products,
-  //   subtotal:order.subTotal,
-  //   total: order.finalPrice,
-  //   invoice_nr: order._id
-  // };
+  const invoice = {
+    shipping: {
+      name: req.user.userName,
+      address:``,
+      city: "",
+      state: "",
+      country: "",
+      postal_code: "",
+      discount:req.body.discount,
+      days:diff,
+    },
+    items: req.body.roomsInvoke,
+    subtotal:req.body.subTotal,
+    total: reservation.finalPrice,
+    invoice_nr: reservation._id
+  };
+
+  createInvoice(invoice, "invoice.pdf");
+
+  await sendEmail(req.user.email, 'invoice Hotel System', 'congrats, your reservation has been created', {path:'invoice.pdf', contentType:'application/pdf' });
 
   return res.status(201).json({ message: "success", reservation });
 };

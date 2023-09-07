@@ -15,12 +15,12 @@ export function createInvoice(invoice, path) {
 
 function generateHeader(doc) {
   doc
-    .image("logo.jpg", 50, 45, { width: 50 })
+    .image("logo.png", 50, 45, { width: 50 })
     .fillColor("#444444")
     .fontSize(20)
-    .text("E-Commerce3.", 110, 57)
+    .text("Hotel System.", 110, 57)
     .fontSize(10)
-    .text("E-Commerce3.", 200, 50, { align: "right" })
+    .text("Hotel System.", 200, 50, { align: "right" })
     .text("123 Main Street", 200, 65, { align: "right" })
     .text("New York, NY, 10025", 200, 80, { align: "right" })
     .moveDown();
@@ -59,8 +59,8 @@ function generateCustomerInformation(doc, invoice) {
     //   invoice.shipping.city +
         // ", " +
         invoice.shipping.address +
-        ", " +
-        invoice.shipping.country,
+        // ", " +
+        // invoice.shipping.country,
       300,
       customerInformationTop + 30
     )
@@ -78,9 +78,9 @@ function generateInvoiceTable(doc, invoice) {
     doc,
     invoiceTableTop,
     "Item",
-    // "Description",
-    "Unit Cost",
-    "Quantity",
+    "Discount",
+    "night Cost",
+    "#OfNights",
     "Line Total"
   );
   generateHr(doc, invoiceTableTop + 20);
@@ -93,9 +93,9 @@ function generateInvoiceTable(doc, invoice) {
       doc,
       position,
       item.name,
-      // item.description,
-      formatCurrency(item.unitPrice * 100),
-      item.qty,
+      invoice.shipping.discount+"%",
+      formatCurrency(item.nightPrice * 100),
+      invoice.shipping.days,
       formatCurrency(item.finalPrice * 100)
     );
 
