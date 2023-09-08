@@ -21,8 +21,9 @@ export const shareProfile = joi
 
 
 
-  export const makeAdmin = joi.object({
+  export const changeRole = joi.object({
     id: generalFields.id.required(),
+    role: generalFields.role.required(),
   })
 
 

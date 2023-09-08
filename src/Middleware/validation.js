@@ -57,6 +57,7 @@ export const generalFields = {
     }),
     id:joi.string().custom(validationObjectId),
     refreshToken:joi.string().custom(validationRefreshToken),
+    role:joi.string().valid(roles.User, roles.Admin, roles.SuperAdmin),
 }
 
 const validation = (schema)=>{

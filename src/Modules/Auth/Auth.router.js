@@ -3,6 +3,7 @@ import * as AuthController from './controller/Auth.controller.js';
 import { asyncHandler } from '../../Services/errorHandling.js';
 import validation from '../../Middleware/validation.js';
 import * as validators from './Auth.validation.js';
+import { auth, roles } from '../../Middleware/auth.middleware.js';
 const router =Router({caseSensitive:true});
 
 router.post('/signup', validation(validators.signup), asyncHandler(AuthController.signup))
@@ -12,5 +13,7 @@ router.get('/newConfirmEmail/:token', validation(validators.confirmEmail), async
 router.patch('/sendCode', validation(validators.sendCode), asyncHandler(AuthController.sendCode));
 router.patch('/forgetPassword',validation(validators.forgetPassword) ,asyncHandler(AuthController.forgetPassword));
 router.post('/refresh', validation(validators.refresh), asyncHandler(AuthController.refreshToken));
+
+router.post('/signup/admin', auth([roles.SuperAdmin]), validation(validators.createAdmin), asyncHandler(AuthController.createAdmin))
 
 export default router;

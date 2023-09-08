@@ -22,10 +22,10 @@ router.patch(
   asyncHandler(userController.coverPic)
 );
 router.patch(
-  "/makeAdmin/:id",
+  "/changeRole/:id",
   auth(roles.SuperAdmin),
-  validation(validators.makeAdmin),
-  asyncHandler(userController.makeAdmin)
+  validation(validators.changeRole),
+  asyncHandler(userController.changeRole)
 );
 
 router.patch(
@@ -40,4 +40,5 @@ router.get(
   validation(validators.shareProfile),
   asyncHandler(userController.shareProfile)
 );
+
 export default router;

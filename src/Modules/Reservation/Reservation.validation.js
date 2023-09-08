@@ -34,4 +34,11 @@ export const getReservationsInHotel = joi.object({
 }).required()
 
 
+export const getAvailableInHotel = joi.object({
+   hotelId: generalFields.id.required(),
+   from:joi.required(),
+   to:joi.required(),
+}).required()
+
+
 // 

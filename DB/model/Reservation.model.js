@@ -5,15 +5,11 @@ const reservationSchema = new Schema(
       type: [
         {
           roomId: { type: Types.ObjectId, ref: "Room", required: true },
-          // price: { type: Number, required: true },
-          // discountPerDay: { type: Number, required: true },
-          // finalPrice: { type: Number, required: true },
         },
       ],
       required: true,
     },
     discount: {
-      // amount (not percentage)
       type: Number,
       default: 0,
     },

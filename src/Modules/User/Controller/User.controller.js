@@ -66,9 +66,10 @@ export const shareProfile = async(req,res,next)=>{
 
 }
 
-export const makeAdmin = async (req, res, next) => {
+export const changeRole = async (req, res, next) => {
     const {id} = req.params;
-    const user = await userModel.findByIdAndUpdate({id}, {role: 'Admin'}, {new: true});
+    const {role} = req.body;
+    const user = await userModel.findByIdAndUpdate({id}, {role}, {new: true});
     if(!user)
         return next(new Error('no user found',{cause:404}));
     return res.status(200).json({message:'success', user});

@@ -1,17 +1,6 @@
 import joi from "joi";
 import { generalFields } from "../../Middleware/validation.js";
 
-export const signupSchema = joi
-  .object({
-    userName: joi.string().alphanum().min(3).max(20).required().messages({
-      "any.required": "username is required",
-      "string.empty": "username is required",
-    }),
-    email: generalFields.email,
-    password: generalFields.password,
-    cPassword: joi.string().valid(joi.ref("password")).required(),
-  })
-  .required();
 
 export const loginSchema = joi
   .object({
@@ -39,6 +28,14 @@ export const loginSchema = joi
   });
 
   export const signup = joi.object({
+    userName:joi.string().min(3).max(40).required(),
+    email: generalFields.email.required(),
+    password:generalFields.password.required(),
+    cPassword:joi.any().valid(joi.ref('password')).required().messages({
+      "any.only":"Does not match password"})
+  });
+
+  export const createAdmin = joi.object({
     userName:joi.string().min(3).max(40).required(),
     email: generalFields.email.required(),
     password:generalFields.password.required(),
