@@ -1,8 +1,5 @@
 import cityModel from "../../../../DB/model/City.model.js";
 import countryModel from "../../../../DB/model/Country.model.js";
-// import cloudinary from "../../../Services/cloudinary.js";
-// import slugify from "slugify";
-
 
 
 export const createCity = async(req,res,next)=>{
@@ -24,7 +21,6 @@ export const createCity = async(req,res,next)=>{
     const city = await cityModel.create({name,lat,lng, createdBy:req.user._id, updatedBy:req.user._id, countryId});
     return res.status(201).json({message:'success',city});
 }
-
 
 export const updateCity = async (req, res, next) => {
     const {name,lng,lat} = req.body;
@@ -76,11 +72,27 @@ export const getCity = async (req,res,next)=>{
 }
 
 export const getCities = async (req,res,next)=>{
-    const cities = await cityModel.find();
-    if(!cities) {
-        return next(new Error('no cities found',{cause:404}));
-    }
-    return res.status(200).json({message:'success', cities});
+    const { page, size, sort, search } = req.query;
+    const ecxQueryParams = ["page", "size", "sort", "search"];
+  const filterQuery = { ...req.query };
+  ecxQueryParams.map((param) => {
+    delete filterQuery[param];
+  });
+  const query = JSON.parse(
+    JSON.stringify(filterQuery).replace(
+      /(gt|gte|lt|lte|in|nin|eq|neq)/g,
+      (match) => `$${match}`
+    )
+  );
+  const {name} = query;
+  const skip = ((page ?? 1) - 1) * (size || 5);
+     req.body.cities = await cityModel.find({name}).limit(size || 5).skip(skip).sort(sort?.replaceAll(','," "));
+    // if(!cities) {
+    //     return next(new Error('no cities found',{cause:404}));
+    // }
+    if(search)
+    req.body.cities = await req.body.cities.find({name:{$regex:name, $options:"i"}})
+    return res.status(200).json({message:'success', cities:req.body.cities});
 }
 
 export const getCitiesInCountry = async (req,res,next)=>{

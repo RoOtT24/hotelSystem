@@ -76,12 +76,27 @@ export const getRegion = async (req,res,next)=>{
 }
 
 export const getRegions = async (req,res,next)=>{
-    const regions = await regionModel.find();
-    if(!regions) {
-        return next(new Error('no regions found',{cause:404}));
-    }
-    return res.status(200).json({message:'success', regions});
+    const { page, size, sort, search } = req.query;
+    const ecxQueryParams = ["page", "size", "sort", "search"];
+  const filterQuery = { ...req.query };
+  ecxQueryParams.map((param) => {
+    delete filterQuery[param];
+  });
+  const query = JSON.parse(
+    JSON.stringify(filterQuery).replace(
+      /(gt|gte|lt|lte|in|nin|eq|neq)/g,
+      (match) => `$${match}`
+    )
+  );
+  const {name} = query;
+  const skip = ((page ?? 1) - 1) * (size || 5);
+     req.body.regions = await regionModel.find({name}).limit(size || 5).skip(skip).sort(sort?.replaceAll(','," "));
+    if(search)
+    req.body.regions = await req.body.regions.find({name:{$regex:name, $options:"i"}})
+    return res.status(200).json({message:'success', regions:req.body.regions});
 }
+
+
 
 export const getRegionsInCity = async (req,res,next)=>{
     const {countryId, cityId} = req.params;

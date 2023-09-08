@@ -165,13 +165,29 @@ export const getRoom = async (req, res, next) => {
   return res.status(200).json({ message: "success", room });
 };
 
-export const getRooms = async (req, res, next) => {
-  const rooms = await roomModel.find();
-  if (!rooms) {
-    return next(new Error("no rooms found", { cause: 404 }));
-  }
-  return res.status(200).json({ message: "success", rooms });
-};
+export const getRooms = async (req,res,next)=>{
+  const { page, size, sort, search } = req.query;
+  const ecxQueryParams = ["page", "size", "sort", "search"];
+const filterQuery = { ...req.query };
+ecxQueryParams.map((param) => {
+  delete filterQuery[param];
+});
+const query = JSON.parse(
+  JSON.stringify(filterQuery).replace(
+    /(gt|gte|lt|lte|in|nin|eq|neq)/g,
+    (match) => `$${match}`
+  )
+);
+const {name} = query;
+const skip = ((page ?? 1) - 1) * (size || 5);
+   req.body.rooms = await roomModel.find({name}).limit(size || 5).skip(skip).sort(sort?.replaceAll(','," "));
+  // if(!rooms) {
+  //     return next(new Error('no rooms found',{cause:404}));
+  // }
+  if(search)
+  req.body.rooms = await req.body.rooms.find({name:{$regex:name, $options:"i"}})
+  return res.status(200).json({message:'success', rooms:req.body.rooms});
+}
 
 export const getRoomsInHotel = async (req, res, next) => {
   const { hotelId } = req.params;

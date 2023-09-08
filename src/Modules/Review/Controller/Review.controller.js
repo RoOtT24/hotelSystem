@@ -34,15 +34,3 @@ export const getReviews = async (req, res, next) => {
   const reviews = await reviewModel.find({hotelId});
   return res.status(200).json({message: "success", reviews});
 }
-
-// export const getSpecificReview = async (req, res, next) => {
-//   const review = await reviewModel.findById(req.params.catId);
-//   if(!review)
-//     return res.status(404).json({ message: "no review found"});
-//   return res.status(200).json({message:"success", review});
-// }
-// export const getReview = async (req, res, next) => {
-//   const categories = await reviewModel.find();
-  
-//   return res.status(200).json({message:"success", categories});
-// }

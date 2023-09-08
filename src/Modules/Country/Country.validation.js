@@ -23,6 +23,11 @@ export const getCountry = joi.object({
 }).required()
 
 export const getCountries = joi.object({
-
+   size:joi.number().min(1).max(30),
+   page:joi.number().min(1),
+   price:joi.object(),
+   stock:joi.object(),
+   sort:joi.string(),
+   search:joi.string(),
 }).required()
 
