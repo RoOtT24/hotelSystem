@@ -15,7 +15,7 @@ router.patch('/forgetPassword',validation(validators.forgetPassword) ,asyncHandl
 router.post('/refresh', validation(validators.refresh), asyncHandler(AuthController.refreshToken));
 
 router.post('/signup/admin', auth([roles.SuperAdmin]), validation(validators.createAdmin), asyncHandler(AuthController.createAdmin))
-router.patch('/deActive/admin', auth([roles.SuperAdmin]), validation(validators.deActive), asyncHandler(AuthController.deActive))
-router.patch('/active/admin', auth([roles.SuperAdmin]), validation(validators.active), asyncHandler(AuthController.active))
+router.patch('/deActive/admin/:adminId', auth([roles.SuperAdmin]), validation(validators.deActive), asyncHandler(AuthController.deActive))
+router.patch('/active/admin/:adminId', auth([roles.SuperAdmin]), validation(validators.active), asyncHandler(AuthController.active))
 
 export default router;
