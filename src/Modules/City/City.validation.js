@@ -29,8 +29,6 @@ export const getCity = joi.object({
 export const getCities = joi.object({
    size:joi.number().min(1),
    page:joi.number().min(1),
-   price:joi.object(),
-   stock:joi.object(),
    sort:joi.string(),
    search:joi.string(),
 }).required()
@@ -38,5 +36,7 @@ export const getCities = joi.object({
 
 export const getCitiesInCountry = joi.object({
    countryId: generalFields.id.required(),
+   size:joi.number().min(1),
+   page:joi.number().min(1),
 }).required()
 

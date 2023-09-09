@@ -98,7 +98,10 @@ export const getCities = async (req,res,next)=>{
 export const getCitiesInCountry = async (req,res,next)=>{
     const {countryId} = req.params;
 
-    const country = countryModel.findById(countryId);
+    const { page, size } = req.query;
+  const skip = ((page ?? 1) - 1) * (size || 5);
+
+    const country = countryModel.findById(countryId).limit(size || 5).skip(skip);
     if(!country){
         return next(new Error('no country found', {cause:404}));
     }
@@ -108,3 +111,5 @@ export const getCitiesInCountry = async (req,res,next)=>{
     }
     return res.status(200).json({message:'success', cities});
 }
+
+

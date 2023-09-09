@@ -292,7 +292,7 @@ export const signup= async (req,res,next)=>{
 
 export const createAdmin= async (req,res,next)=>{
   
-  const {userName,email,password, cPassword} = req.body;
+  const {userName,email,password} = req.body;
   
   const user = await userModel.findOne({email});
   if(user){
@@ -950,3 +950,23 @@ export const forgetPassword = async (req, res, next) => {
   user.save();
   return res.status(200).json({message:'success', user});
 }
+
+
+
+export const deActive = async (req, res, next) => {
+  const {adminId} = req.params;
+  const admin = await userModel.findOneAndUpdate({_id:adminId, role:'Admin'}, {isActive:false});
+  if(!admin)
+    return next(new Error("no such admin",{cause:404}));
+  return res.status(200).json({message:"success"});
+}
+
+export const active = async (req, res, next) => {
+  const {adminId} = req.params;
+  const admin = await userModel.findOneAndUpdate({_id:adminId, role:'Admin'}, {isActive:true});
+  if(!admin)
+    return next(new Error("no such admin",{cause:404}));
+  return res.status(200).json({message:"success"});
+}
+
+

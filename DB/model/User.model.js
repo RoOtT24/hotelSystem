@@ -52,6 +52,7 @@ const userSchema = new Schema ({
     },
     wishList:[{type:Types.ObjectId, ref:'Product', required:true}]
     ,
+    isActive:{type:Boolean, default:true},
 },
 
 {

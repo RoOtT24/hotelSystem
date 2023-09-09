@@ -28,9 +28,11 @@ export const updateReview = async (req, res, next) => {
   return res.status(200).json({ message: "success", review });
 }
 
-
-export const getReviews = async (req, res, next) => {
+export const getReviews = async (req,res,next)=>{
+  const { page, size } = req.query;
   const {hotelId} = req.params;
-  const reviews = await reviewModel.find({hotelId});
-  return res.status(200).json({message: "success", reviews});
+  const ecxQueryParams = ["page", "size"];
+  const skip = ((page ?? 1) - 1) * (size || 5);
+   req.body.reviews = await reviewModel.find({hotelId}).limit(size || 5).skip(skip);
+  return res.status(200).json({message:'success', reviews:req.body.reviews});
 }

@@ -47,3 +47,11 @@ export const loginSchema = joi
   export const confirmEmail = joi.object({
     token:joi.string().required(),
   })
+
+  export const deActive = joi.object({
+    adminId:generalFields.id.required(),
+  })
+
+  export const active = joi.object({
+    adminId:generalFields.id.required(),
+  })

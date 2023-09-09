@@ -68,10 +68,25 @@ export const getSpecificCoupon = async (req, res, next) => {
   return res.status(200).json({message:"success", coupon});
 }
 
-export const getCoupons = async (req, res, next) => {
-  const coupons = await couponModel.find();
-  
-  return res.status(200).json({message:"success", coupons});
+export const getCoupons = async (req,res,next)=>{
+  const { page, size, sort, search } = req.query;
+  const ecxQueryParams = ["page", "size", "sort", "search"];
+const filterQuery = { ...req.query };
+ecxQueryParams.map((param) => {
+  delete filterQuery[param];
+});
+const query = JSON.parse(
+  JSON.stringify(filterQuery).replace(
+    /(gt|gte|lt|lte|in|nin|eq|neq)/g,
+    (match) => `$${match}`
+  )
+);
+const {name} = query;
+const skip = ((page ?? 1) - 1) * (size || 5);
+   req.body.coupons = await couponModel.find({name}).limit(size || 5).skip(skip).sort(sort?.replaceAll(','," "));
+  if(search)
+  req.body.coupons = await req.body.coupons.find({name:{$regex:name, $options:"i"}})
+  return res.status(200).json({message:'success', coupons:req.body.coupons});
 }
 
 

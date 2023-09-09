@@ -32,6 +32,8 @@ export const getSpecificReview = joi.object({
 
 export const getReviews = joi.object({
     hotelId:generalFields.id.required(),
+    size:joi.number().min(1),
+    page:joi.number().min(1),
 }).required();
 
 export const deleteReview = joi.object({
