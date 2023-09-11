@@ -68,7 +68,7 @@ export const getCountries = async (req,res,next)=>{
   );
   const {name} = query;
   const skip = ((page ?? 1) - 1) * (size || 5);
-     req.body.countries = await countryModel.find({name}).limit(size || 5).skip(skip).sort(sort?.replaceAll(','," "));
+     req.body.countries = await countryModel.find({}).limit(size || 5).skip(skip).sort(sort?.replaceAll(','," "));
     // if(!countries) {
     //     return next(new Error('no countries found',{cause:404}));
     // }
