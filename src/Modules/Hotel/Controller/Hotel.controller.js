@@ -165,7 +165,7 @@ const query = JSON.parse(
 );
 const {name} = query;
 const skip = ((page ?? 1) - 1) * (size || 5);
-   req.body.hotels = await hotelModel.find({name}).populate('reviews').limit(size || 5).skip(skip).sort(sort?.replaceAll(','," "));
+   req.body.hotels = await hotelModel.find({}).populate('reviews').limit(size || 5).skip(skip).sort(sort?.replaceAll(','," "));
   if(search)
   req.body.hotels = await req.body.hotels.find({name:{$regex:name, $options:"i"}})
   return res.status(200).json({message:'success', hotels:req.body.hotels});

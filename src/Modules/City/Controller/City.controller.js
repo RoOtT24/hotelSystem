@@ -86,7 +86,7 @@ export const getCities = async (req,res,next)=>{
   );
   const {name} = query;
   const skip = ((page ?? 1) - 1) * (size || 5);
-     req.body.cities = await cityModel.find({name}).limit(size || 5).skip(skip).sort(sort?.replaceAll(','," "));
+     req.body.cities = await cityModel.find({}).limit(size || 5).skip(skip).sort(sort?.replaceAll(','," "));
     // if(!cities) {
     //     return next(new Error('no cities found',{cause:404}));
     // }

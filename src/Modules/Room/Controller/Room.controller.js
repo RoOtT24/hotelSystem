@@ -180,7 +180,7 @@ const query = JSON.parse(
 );
 const {name} = query;
 const skip = ((page ?? 1) - 1) * (size || 5);
-   req.body.rooms = await roomModel.find({name}).limit(size || 5).skip(skip).sort(sort?.replaceAll(','," "));
+   req.body.rooms = await roomModel.find({}).limit(size || 5).skip(skip).sort(sort?.replaceAll(','," "));
   // if(!rooms) {
   //     return next(new Error('no rooms found',{cause:404}));
   // }
